@@ -66,7 +66,6 @@ juju add-machine ssh:node8@192.168.1.9
 
 ```
 
-
 ## Deploy Charmed Kubernetes
 
 #### Vanilla Bundle
@@ -88,6 +87,7 @@ juju deploy ./*.yaml --map-machines=existing
 
 ### Scalare master e kubeapi loadbalancer (solo per Vanilla Bundle)
 
+
 ```console
 juju add-unit -n 1 kubernetes-master --to 4
 juju add-unit -n 2 kubeapi-load-balancer --to 4,5
@@ -100,6 +100,30 @@ juju deploy hacluster --series focal
 juju config kubeapi-load-balancer ha-cluster-vip="192.168.1.10 192.168.1.11"
 juju relate kubeapi-load-balancer hacluster
 ```
+
+## Installare kubectl
+
+```console
+sudo snap install kubectl --classic
+```
+
+### Copiare il kubeconfig
+
+```console
+juju scp kubernete-master/0:config .kube/konfig
+```
+
+### Installare helm
+```console
+sudo snap install helm --classic
+helm repo add rook-release https://charts.rook.io/release
+kubectl create namespace rook-ceph
+helm install --namespace rook-ceph rook-ceph rook-release/rook-ceph
+```
+
+
+
+
 
 
 ## Teardown
